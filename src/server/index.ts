@@ -21,7 +21,11 @@ export class ApiServer implements HttpServer {
         private readonly controllers: Controller[]
     ) {}
 
-    private addRoute(method: 'get' | 'post' | 'put' | 'delete' | 'all', url: string, requestHandler: RequestHandler, middlewares: RequestHandler[]): void {
+    private addRoute(
+        method: 'get' | 'post' | 'put' | 'delete' | 'all',
+        url: string, requestHandler: RequestHandler,
+        middlewares: RequestHandler[]
+    ): void {
         this.express[method](url, ...middlewares, async (req, res, next) => {
             try {
                 await requestHandler(req, res, next);
@@ -47,24 +51,6 @@ export class ApiServer implements HttpServer {
     all(url: string, requestHandler: RequestHandler, ...middlewares: RequestHandler[]): void {
         this.addRoute("all", url, requestHandler, middlewares);
     }
-
-    /*get(url: string, requestHandler: RequestHandler): void {
-        this.addRoute("get", url, requestHandler);
-    }
-    post(url: string, requestHandler: RequestHandler): void {
-        this.addRoute("post", url, requestHandler);
-    }
-    put(url: string, requestHandler: RequestHandler): void {
-        this.addRoute("put", url, requestHandler);
-    }
-    delete(url: string, requestHandler: RequestHandler): void {
-        this.addRoute("delete", url, requestHandler);
-    }
-    all(url: string, requestHandler: RequestHandler): void {
-        this.addRoute("all", url, requestHandler);
-    }*/
-
-
 
     public start(port: number): void {
         this.express.use(helmet());
